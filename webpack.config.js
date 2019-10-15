@@ -6,6 +6,7 @@ module.exports = {
     entry  : './src/index.js',
     output : {
         path    : path.resolve(__dirname, 'dist'),
+        chunkFilename: '[name].bundle.js',
         filename: 'bundle.js'
     },
 
@@ -31,6 +32,6 @@ module.exports = {
     },
 
     plugins: [
-        new CopyWebpackPlugin([{ from: './*.html' }])
+        new CopyWebpackPlugin([{ from: './*.html' }]),
     ]
 }
