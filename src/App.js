@@ -1,6 +1,7 @@
 import React, { Suspense, Component } from 'react';
 import ErrorBoundary from './components/ErrorBoundary';
-import NormalError from './components/NoramlError'
+import NormalError from './components/NoramlError';
+import ForwardRefComponent from './components/ForwardRefComponent';
 
 const LazyComponent = React.lazy(() => {
     return new Promise((resolve, reject) => {
@@ -17,13 +18,35 @@ const LazyError = React.lazy(() => {
 
 export default class App extends Component {
 
+    constructor(props) {
+        super(props)
+        this.state = {
+            check: false
+        }
+        this.buttonRef = React.createRef();
+    }
+
+    componentDidMount() {
+        this.buttonRef.current.focus()
+        this.buttonRef.current.addEventListener('click', () => {
+            this.setState({
+                check : true
+            })
+        })
+    }
+
     render() {
         return (
             <div>
                 <h1>Hello, world!</h1>
-                    <Suspense fallback={<h2>Loading ... </h2>}> 
-                            <LazyComponent />
-                    </Suspense>
+                    <ForwardRefComponent ref={this.buttonRef}> Click me </ForwardRefComponent>
+                    {
+                        this.state.check ? (
+                            <Suspense fallback={<h2>Loading ... </h2>}> 
+                                <LazyComponent />
+                            </Suspense>
+                        ) : ''
+                    }
                     <ErrorBoundary> 
                         <Suspense fallback={<h2>Loading ... </h2>}>
                             <LazyError />
